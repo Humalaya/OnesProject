@@ -1,0 +1,84 @@
+<div class="container">
+  <header class="header">
+    <h1><span class="icon">✨</span> To-Do List Application</h1>
+    <p class="subtitle">ONES Stajyer Projesi - CQRS & Angular</p>
+  </header>
+
+  <!-- New Task Form -->
+  <section class="task-form-section">
+    <h2>Add New Task</h2>
+    <form (submit)="createTodo(); $event.preventDefault()" class="task-form">
+      <div class="form-group">
+        <input 
+          type="text" 
+          [(ngModel)]="newTitle" 
+          name="newTitle" 
+          placeholder="Task title..." 
+          required 
+        />
+      </div>
+      <div class="form-group">
+        <textarea 
+          [(ngModel)]="newDescription" 
+          name="newDescription" 
+          placeholder="Task description (optional)..." 
+          rows="2">
+        </textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Add Task</button>
+    </form>
+  </section>
+
+  <!-- Task List Section -->
+  <section class="task-list-section">
+    <h2>Tasks List</h2>
+    <div *ngIf="todos.length === 0" class="no-tasks">
+      <p>No tasks found. Add a new task above!</p>
+    </div>
+
+    <div class="task-grid">
+      <div *ngFor="let todo of todos" class="task-card" [class.completed]="todo.isCompleted">
+        
+        <!-- Normal View -->
+        <div *ngIf="editId !== todo.id" class="task-content">
+          <div class="task-header">
+            <h3 [class.strike]="todo.isCompleted">{{ todo.title }}</h3>
+            <span class="badge" [class.badge-success]="todo.isCompleted" [class.badge-pending]="!todo.isCompleted">
+              {{ todo.isCompleted ? 'Completed' : 'Pending' }}
+            </span>
+          </div>
+          <p class="task-desc" *ngIf="todo.description">{{ todo.description }}</p>
+          <small class="task-date">Created: {{ todo.createdAt | date:'medium' }}</small>
+          
+          <div class="task-actions">
+            <button 
+              class="btn btn-sm" 
+              [class.btn-success]="!todo.isCompleted" 
+              [class.btn-warning]="todo.isCompleted"
+              (click)="toggleComplete(todo)">
+              {{ todo.isCompleted ? 'Mark Pending' : 'Mark Completed' }}
+            </button>
+            <button class="btn btn-sm btn-secondary" (click)="startEdit(todo)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteTodo(todo.id)">Delete</button>
+          </div>
+        </div>
+
+        <!-- Edit View -->
+        <div *ngIf="editId === todo.id" class="task-edit-form">
+          <h3>Edit Task</h3>
+          <div class="form-group">
+            <input type="text" [(ngModel)]="editTitle" name="editTitle" required />
+          </div>
+          <div class="form-group">
+            <textarea [(ngModel)]="editDescription" name="editDescription" rows="2"></textarea>
+          </div>
+          <div class="task-actions">
+            <button class="btn btn-sm btn-success" (click)="saveEdit(todo)">Save</button>
+            <button class="btn btn-sm btn-secondary" (click)="cancelEdit()">Cancel</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>

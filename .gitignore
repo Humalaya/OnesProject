@@ -1,0 +1,11 @@
+# .gitignore
+[Oo]bj/
+[Bb]in/
+.vs/
+*.user
+*.suo
+node_modules/
+dist/
+.angular/
+.DS_Store
+*.log
