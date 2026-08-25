@@ -8,6 +8,7 @@ namespace TodoListApi.Application.Features.ToDoFeature.Commands.DeleteToDo
     public class DeleteToDoCommandRequest : MediatR.IRequest<bool>
     {
         public Guid ID { get; set; }
+        public Guid UserID { get; set; }
     }
 
     public class DeleteToDoCommandHandler : MediatR.IRequestHandler<DeleteToDoCommandRequest, bool>
@@ -21,7 +22,7 @@ namespace TodoListApi.Application.Features.ToDoFeature.Commands.DeleteToDo
 
         public async Task<bool> Handle(DeleteToDoCommandRequest request, CancellationToken cancellationToken)
         {
-            var todo = await _toDoRepository.GetByIdAsync(request.ID, cancellationToken);
+            var todo = await _toDoRepository.GetByIdAsync(request.ID, request.UserID, cancellationToken);
             if (todo == null) return false;
 
             _toDoRepository.Delete(todo);

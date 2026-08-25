@@ -8,6 +8,7 @@ namespace TodoListApi.Application.Features.ToDoFeature.Commands.UpdateToDo
     public class UpdateToDoCommandRequest : MediatR.IRequest<bool>
     {
         public Guid ID { get; set; }
+        public Guid UserID { get; set; }
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
         public bool IsCompleted { get; set; }
@@ -24,7 +25,7 @@ namespace TodoListApi.Application.Features.ToDoFeature.Commands.UpdateToDo
 
         public async Task<bool> Handle(UpdateToDoCommandRequest request, CancellationToken cancellationToken)
         {
-            var todo = await _toDoRepository.GetByIdAsync(request.ID, cancellationToken);
+            var todo = await _toDoRepository.GetByIdAsync(request.ID, request.UserID, cancellationToken);
             if (todo == null) return false;
 
             todo.Title = request.Title;

@@ -10,6 +10,13 @@ export interface Todo {
   createdAt: string;
 }
 
+export interface PagedTodos {
+  items: Todo[];
+  totalCount: number;
+  pageNumber: number;
+  pageSize: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,8 +25,10 @@ export class TodoService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Todo[]> {
-    return this.http.get<Todo[]>(this.apiUrl);
+  getAll(pageNumber: number, pageSize: number): Observable<PagedTodos> {
+    return this.http.get<PagedTodos>(this.apiUrl, {
+      params: { pageNumber, pageSize }
+    });
   }
 
   getById(id: string): Observable<Todo> {

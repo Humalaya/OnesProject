@@ -8,6 +8,7 @@ namespace TodoListApi.Application.Features.ToDoFeature.Queries.GetByIdToDo
     public class GetByIdToDoQueryRequest : MediatR.IRequest<GetByIdToDoQueryResponse>
     {
         public Guid ID { get; set; }
+        public Guid UserID { get; set; }
     }
 
     public class GetByIdToDoQueryResponse
@@ -30,7 +31,7 @@ namespace TodoListApi.Application.Features.ToDoFeature.Queries.GetByIdToDo
 
         public async Task<GetByIdToDoQueryResponse?> Handle(GetByIdToDoQueryRequest request, CancellationToken cancellationToken)
         {
-            var todo = await _toDoRepository.GetByIdAsync(request.ID, cancellationToken);
+            var todo = await _toDoRepository.GetByIdAsync(request.ID, request.UserID, cancellationToken);
             if (todo == null) return null;
 
             return new GetByIdToDoQueryResponse

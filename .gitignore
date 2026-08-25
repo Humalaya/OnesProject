@@ -9,3 +9,6 @@ dist/
 .angular/
 .DS_Store
 *.log
+TodoListApi/todo.db
+TodoListApi/wwwroot/uploads/*
+!TodoListApi/wwwroot/uploads/.gitkeep

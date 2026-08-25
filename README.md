@@ -53,51 +53,71 @@ CREATE TABLE ToDo (
 
 ## 🚀 Kurulum ve Çalıştırma Adımları (Setup Instructions)
 
-### 1. Veritabanı ve Backend Setup
+Projenin kök dizininde yer alan **`start.sh`** script dosyası sayesinde hem Backend (.NET API) hem de Frontend (Angular) tek komutla aynı anda başlatılabilir.
+
+### Tek Komutla Çalıştırma (Önerilen)
+Kök dizinde terminali açın ve şu komutu çalıştırın:
+```bash
+./start.sh
+```
+*(Bu script hem API'yi `http://localhost:5000` adresinde hem de Angular UI'yi `http://localhost:4200` adresinde aynı anda başlatır. `Ctrl + C` tuşlarına bastığınızda her iki süreç de güvenle kapatılır).*
+
+### Manuel Çalıştırma Adımları
+
+#### 1. Veritabanı ve Backend Setup
 1. **MSSQL Server** çalışır durumda olmalıdır.
-2. `TodoListApi/appsettings.json` içerisindeki connection string'i kendi MSSQL sunucu ayarlarınıza göre güncelleyin:
-   ```json
-   "ConnectionStrings": {
-     "DefaultConnection": "Server=localhost;Database=TodoListDb;Trusted_Connection=True;TrustServerCertificate=True;"
-   }
-   ```
-3. Terminalde `TodoListApi` klasörüne gidin ve Entity Framework Migrations ile veritabanını oluşturun:
+2. `TodoListApi/appsettings.json` içerisindeki connection string'i kendi MSSQL sunucu ayarlarınıza göre güncelleyin.
+3. API'yi başlatın:
    ```bash
    cd TodoListApi
-   dotnet ef database update
-   ```
-4. API'yi başlatın:
-   ```bash
    dotnet run
    ```
    *API varsayılan olarak `http://localhost:5000` adresinde çalışacaktır. Swagger arayüzüne `http://localhost:5000/swagger` adresinden erişebilirsiniz.*
 
-### 2. Frontend (Angular) Setup
+#### 2. Frontend (Angular) Setup
 1. Terminalde `TodoListClient` klasörüne gidin:
    ```bash
    cd TodoListClient
    ```
-2. Bağımlılıkları yükleyin:
+2. Bağımlılıkları yükleyin ve Angular uygulamasını başlatın:
    ```bash
    npm install
-   ```
-3. Angular uygulamasını başlatın:
-   ```bash
    npm start
    ```
    *Uygulama tarayıcınızda `http://localhost:4200` adresinde açılacaktır.*
 
 ---
 
+## 🔐 Giriş (Login)
+
+Uygulama artık email/şifre + JWT token ile giriş gerektiriyor. Her kullanıcının kendi görev listesi vardır.
+
+İlk çalıştırmada (`./start.sh` veya `dotnet run`), veritabanı boşsa otomatik olarak bir demo hesap oluşturulur ve konsola yazdırılır:
+
+```
+email:    demo@example.com
+password: Demo123!
+```
+
+Yeni kullanıcı eklemek için sayfa yok — Swagger üzerinden `POST /api/auth/register` çağırarak (`username`, `email`, `password`, isteğe bağlı `fullName`) hesap oluşturabilirsiniz.
+
 ## 📡 API Endpoints ve Örnek İstekler
 
 | İşlem | HTTP Metodu | Endpoint | Açıklama |
 | :--- | :--- | :--- | :--- |
-| **GetAll** | GET | `/api/todo` veya `/api/todo/GetAll` | Tüm görevleri listeler. |
+| **Register** | POST | `/api/auth/register` | Yeni kullanıcı oluşturur, JWT döner. |
+| **Login** | POST | `/api/auth/login` | Email/şifre ile giriş yapar, JWT döner. |
+| **GetAll** | GET | `/api/todo?pageNumber=1&pageSize=10` | Giriş yapan kullanıcının görevlerini sayfalı listeler (pageSize: 5/10/20). |
 | **GetById** | GET | `/api/todo/{id}` | ID'ye göre spesifik görevi getirir. |
 | **Create** | POST | `/api/todo` | Yeni görev oluşturur. |
 | **Update** | PUT | `/api/todo/{id}` | Belirtilen ID'ye sahip görevi günceller. |
 | **Delete** | DELETE | `/api/todo/{id}` | Belirtilen ID'ye sahip görevi siler. |
+| **Profile** | GET | `/api/profile` | Giriş yapan kullanıcının profilini getirir. |
+| **Update Username** | PUT | `/api/profile/username` | Kullanıcı adını değiştirir. |
+| **Change Password** | PUT | `/api/profile/password` | Şifre değiştirir (mevcut + yeni şifre). |
+| **Upload Picture** | POST | `/api/profile/picture` | Profil fotoğrafı yükler (multipart/form-data, `file`). |
+
+`/api/todo` ve `/api/profile` altındaki tüm endpoint'ler `Authorization: Bearer <token>` header'ı gerektirir.
 
 ### Örnek İstekler (cURL / JSON)
 
@@ -127,3 +147,4 @@ CREATE TABLE ToDo (
 - **Ünvan:** Yazılım Mühendisliği Stajyeri (Software Engineering Intern)
 - **LinkedIn:** [linkedin.com/in/emir-profiliniz](https://linkedin.com)
 - **E-posta Teslim Adresi:** ismail@ones.com.tr
+

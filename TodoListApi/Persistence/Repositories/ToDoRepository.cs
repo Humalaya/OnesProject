@@ -18,14 +18,23 @@ namespace TodoListApi.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<ToDo>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<(IEnumerable<ToDo> Items, int TotalCount)> GetPagedAsync(Guid userId, int pageNumber, int pageSize, CancellationToken cancellationToken = default)
         {
-            return await _context.ToDos.AsNoTracking().ToListAsync(cancellationToken);
+            var query = _context.ToDos.AsNoTracking().Where(t => t.UserID == userId).OrderByDescending(t => t.CreatedAt);
+
+            var totalCount = await query.CountAsync(cancellationToken);
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return (items, totalCount);
         }
 
-        public async Task<ToDo?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<ToDo?> GetByIdAsync(Guid id, Guid userId, CancellationToken cancellationToken = default)
         {
-            return await _context.ToDos.FindAsync(new object[] { id }, cancellationToken);
+            var todo = await _context.ToDos.FindAsync(new object[] { id }, cancellationToken);
+            return todo != null && todo.UserID == userId ? todo : null;
         }
 
         public async Task AddAsync(ToDo todo, CancellationToken cancellationToken = default)

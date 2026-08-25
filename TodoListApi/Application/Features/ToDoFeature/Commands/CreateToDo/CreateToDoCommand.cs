@@ -8,6 +8,7 @@ namespace TodoListApi.Application.Features.ToDoFeature.Commands.CreateToDo
 {
     public class CreateToDoCommandRequest : MediatR.IRequest<CreateToDoCommandResponse>
     {
+        public Guid UserID { get; set; }
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
         public bool IsCompleted { get; set; }
@@ -36,6 +37,7 @@ namespace TodoListApi.Application.Features.ToDoFeature.Commands.CreateToDo
             var todo = new ToDo
             {
                 ID = Guid.NewGuid(),
+                UserID = request.UserID,
                 Title = request.Title,
                 Description = request.Description,
                 IsCompleted = request.IsCompleted,

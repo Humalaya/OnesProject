@@ -7,8 +7,8 @@ namespace TodoListApi.Application.Repositories
 {
     public interface IToDoRepository
     {
-        Task<IEnumerable<ToDo>> GetAllAsync(CancellationToken cancellationToken = default);
-        Task<ToDo?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<(IEnumerable<ToDo> Items, int TotalCount)> GetPagedAsync(Guid userId, int pageNumber, int pageSize, CancellationToken cancellationToken = default);
+        Task<ToDo?> GetByIdAsync(Guid id, Guid userId, CancellationToken cancellationToken = default);
         Task AddAsync(ToDo todo, CancellationToken cancellationToken = default);
         void Update(ToDo todo);
         void Delete(ToDo todo);
