@@ -1,0 +1,14 @@
+using System;
+
+namespace TodoListApi.Domain.Entities
+{
+    public class ToDo
+    {
+        public Guid ID { get; set; }
+        public Guid UserID { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public bool IsCompleted { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    }
+}

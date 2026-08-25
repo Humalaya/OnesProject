@@ -1,0 +1,14 @@
+# .gitignore
+[Oo]bj/
+[Bb]in/
+.vs/
+*.user
+*.suo
+node_modules/
+dist/
+.angular/
+.DS_Store
+*.log
+TodoListApi/todo.db
+TodoListApi/wwwroot/uploads/*
+!TodoListApi/wwwroot/uploads/.gitkeep
