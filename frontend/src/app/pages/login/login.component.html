@@ -1,0 +1,44 @@
+<div class="login-page">
+  <div class="login-card">
+    <img src="/logo.png" alt="Logo" class="brand-logo" />
+    <h1>To-Do List</h1>
+    <p class="subtitle">Sign in to see your tasks</p>
+
+    <form (submit)="submit(); $event.preventDefault()" class="login-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          #emailModel="ngModel"
+          [pattern]="emailPattern"
+          placeholder="you@example.com"
+          required
+          autocomplete="username"
+        />
+        <p class="field-error" *ngIf="emailModel.invalid && emailModel.touched">Please enter a valid email address.</p>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="••••••••"
+          required
+          autocomplete="current-password"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Signing in...' : 'Sign In' }}
+      </button>
+    </form>
+
+    <p class="switch-link">Don't have an account? <a routerLink="/register">Sign up</a></p>
+  </div>
+</div>

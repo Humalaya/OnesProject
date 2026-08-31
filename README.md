@@ -33,7 +33,7 @@ Proje katmanlı mimari ve **CQRS** prensiplerine uygun olarak tasarlanmıştır:
   - `Contexts/TodoDbContext.cs`: EF Core DbContext, MSSQL ve Fluent API konfigürasyonları.
   - `Repositories/ToDoRepository.cs`: Repository implementasyonu.
 - **API Katmanı (`Controllers/ToDoController.cs`)**: CQRS Handler'larını `Mediator` vasıtasıyla tetikleyen REST API endpoint'leri.
-- **Frontend Katmanı (`TodoListClient/`)**: Angular standalone bileşenler ve servisler ile oluşturulmuş arayüz.
+- **Frontend Katmanı (`frontend/`)**: Angular standalone bileşenler ve servisler ile oluşturulmuş arayüz.
 
 ---
 
@@ -66,18 +66,18 @@ Kök dizinde terminali açın ve şu komutu çalıştırın:
 
 #### 1. Veritabanı ve Backend Setup
 1. **MSSQL Server** çalışır durumda olmalıdır.
-2. `TodoListApi/appsettings.json` içerisindeki connection string'i kendi MSSQL sunucu ayarlarınıza göre güncelleyin.
+2. `backend/appsettings.json` içerisindeki connection string'i kendi MSSQL sunucu ayarlarınıza göre güncelleyin.
 3. API'yi başlatın:
    ```bash
-   cd TodoListApi
+   cd backend
    dotnet run
    ```
    *API varsayılan olarak `http://localhost:5000` adresinde çalışacaktır. Swagger arayüzüne `http://localhost:5000/swagger` adresinden erişebilirsiniz.*
 
 #### 2. Frontend (Angular) Setup
-1. Terminalde `TodoListClient` klasörüne gidin:
+1. Terminalde `frontend` klasörüne gidin:
    ```bash
-   cd TodoListClient
+   cd frontend
    ```
 2. Bağımlılıkları yükleyin ve Angular uygulamasını başlatın:
    ```bash

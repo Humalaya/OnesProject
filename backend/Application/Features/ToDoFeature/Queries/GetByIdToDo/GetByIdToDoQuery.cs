@@ -1,0 +1,52 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using backend.Application.Common;
+using backend.Application.Repositories;
+
+namespace backend.Application.Features.ToDoFeature.Queries.GetByIdToDo
+{
+    public class GetByIdToDoQueryRequest : MediatR.IRequest<GetByIdToDoQueryResponse>
+    {
+        public Guid ID { get; set; }
+        public Guid UserID { get; set; }
+    }
+
+    public class GetByIdToDoQueryResponse
+    {
+        public Guid ID { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public bool IsCompleted { get; set; }
+        public string Priority { get; set; } = "medium";
+        public string[] Tags { get; set; } = Array.Empty<string>();
+        public DateTime CreatedAt { get; set; }
+    }
+
+    public class GetByIdToDoQueryHandler : MediatR.IRequestHandler<GetByIdToDoQueryRequest, GetByIdToDoQueryResponse?>
+    {
+        private readonly IToDoRepository _toDoRepository;
+
+        public GetByIdToDoQueryHandler(IToDoRepository toDoRepository)
+        {
+            _toDoRepository = toDoRepository;
+        }
+
+        public async Task<GetByIdToDoQueryResponse?> Handle(GetByIdToDoQueryRequest request, CancellationToken cancellationToken)
+        {
+            var todo = await _toDoRepository.GetByIdAsync(request.ID, request.UserID, cancellationToken);
+            if (todo == null) return null;
+
+            return new GetByIdToDoQueryResponse
+            {
+                ID = todo.ID,
+                Title = todo.Title,
+                Description = todo.Description,
+                IsCompleted = todo.IsCompleted,
+                Priority = ToDoFieldMapper.PriorityToString(todo.Priority),
+                Tags = ToDoFieldMapper.TagsToArray(todo.Tags),
+                CreatedAt = todo.CreatedAt
+            };
+        }
+    }
+}

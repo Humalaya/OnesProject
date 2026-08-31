@@ -1,0 +1,25 @@
+<header class="topbar">
+  <div class="topbar-inner">
+    <a routerLink="/" class="brand"><img src="/logo.png" alt="Logo" class="brand-logo" /> To-Do List</a>
+    <div class="topbar-actions">
+      <div class="topbar-user" *ngIf="authService.isAuthenticated() && authService.currentUser() as user">
+        <button type="button" class="user-chip" (click)="openProfile()">
+          <img
+            *ngIf="user.profilePictureUrl as pic"
+            [src]="pic"
+            alt="Profile picture"
+            class="user-avatar"
+          />
+          <span class="username">{{ user.username }}</span>
+          <span class="verify-dot" *ngIf="!user.emailVerified" title="Email not verified"></span>
+        </button>
+        <button class="btn-logout" (click)="logout()">Log Out</button>
+      </div>
+      <button type="button" class="theme-toggle" (click)="themeService.toggle()" [attr.aria-label]="themeService.theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
+        <mat-icon>{{ themeService.theme() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+    </div>
+  </div>
+</header>
+
+<router-outlet></router-outlet>

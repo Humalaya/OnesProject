@@ -11,15 +11,15 @@ echo "🚀 Starting ONES To-Do List Application (Full Stack)"
 echo "=================================================="
 
 # 1. Start Backend (.NET Core Web API)
-echo "📂 Navigating to TodoListApi and starting .NET API..."
-cd "$ROOT_DIR/TodoListApi"
+echo "📂 Navigating to backend and starting .NET API..."
+cd "$ROOT_DIR/backend"
 dotnet run &
 BACKEND_PID=$!
 echo "✅ Backend API started with PID $BACKEND_PID (http://localhost:5000)"
 
 # 2. Start Frontend (Angular)
-echo "📂 Navigating to TodoListClient and starting Angular..."
-cd "$ROOT_DIR/TodoListClient"
+echo "📂 Navigating to frontend and starting Angular..."
+cd "$ROOT_DIR/frontend"
 
 # Ensure dependencies are installed if node_modules is missing
 if [ ! -d "node_modules" ]; then

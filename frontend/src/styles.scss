@@ -1,0 +1,64 @@
+:root {
+  --bg: #eef3f8;
+  --surface: #ffffff;
+  --surface-alt: #f4f8fb;
+  --text: #22303f;
+  --text-muted: #5c7080;
+  --text-faint: #95a5a6;
+  --border: #d7e1ea;
+  --accent: #3498db;
+  --accent-hover: #2980b9;
+  --success: #2ecc71;
+  --success-hover: #27ae60;
+  --danger: #e74c3c;
+  --danger-hover: #c0392b;
+  --warning: #f39c12;
+  --warning-hover: #d35400;
+}
+
+:root[data-theme='dark'] {
+  --bg: #1b2129;
+  --surface: #242c37;
+  --surface-alt: #2c3542;
+  --text: #e6edf3;
+  --text-muted: #9fb0c0;
+  --text-faint: #7c8ea0;
+  --border: #3a4756;
+  --accent: #5aa9e6;
+  --accent-hover: #7fbcee;
+  --success: #3ddc84;
+  --success-hover: #2fc16d;
+  --danger: #ff6b6b;
+  --danger-hover: #ff8787;
+  --warning: #ffc857;
+  --warning-hover: #ffd97d;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+// ngx-toastr, recolored to match Bootstrap's alert palette (item 23).
+.toast-success {
+  background-color: #198754 !important;
+}
+.toast-error {
+  background-color: #dc3545 !important;
+}
+.toast-info {
+  background-color: #0dcaf0 !important;
+}
+.toast-warning {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}

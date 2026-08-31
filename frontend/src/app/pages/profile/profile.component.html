@@ -1,0 +1,71 @@
+<div class="container" [class.in-dialog]="dialogRef" *ngIf="profile">
+  <div class="page-header">
+    <h1>My Profile</h1>
+    <button *ngIf="dialogRef" class="btn btn-secondary btn-sm" (click)="close()">✕ Close</button>
+    <a *ngIf="!dialogRef" routerLink="/" class="btn btn-secondary btn-sm">← Back to Tasks</a>
+  </div>
+
+  <div class="verify-banner" *ngIf="!profile.emailVerified">
+    <span>⚠️ Your email address isn't verified yet.</span>
+    <button class="btn btn-warning btn-sm" [disabled]="isResendingVerification" (click)="resendVerification()">
+      {{ isResendingVerification ? 'Sending...' : 'Resend verification email' }}
+    </button>
+  </div>
+
+  <section class="picture-section">
+    <h2>Profile Picture</h2>
+    <div class="picture-row">
+      <img
+        class="avatar"
+        [src]="previewUrl || profile.profilePictureUrl || 'https://api.dicebear.com/7.x/initials/svg?seed=' + profile.username"
+        alt="Profile picture"
+      />
+      <div class="picture-actions">
+        <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" (change)="onFileSelected($event)" />
+        <button class="btn btn-primary btn-sm" [disabled]="!selectedFile || isUploadingPicture" (click)="uploadPicture()">
+          {{ isUploadingPicture ? 'Uploading...' : 'Upload' }}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="username-section">
+    <h2>Username</h2>
+    <input type="text" [value]="profile.username" readonly class="readonly-field" />
+    <p class="hint">Email: {{ profile.email }}</p>
+  </section>
+
+  <section class="fullname-section">
+    <h2>Full Name</h2>
+    <form (submit)="saveFullName(); $event.preventDefault()" class="inline-form">
+      <input type="text" [(ngModel)]="fullNameInput" name="fullName" placeholder="Your full name" />
+      <button type="submit" class="btn btn-primary btn-sm" [disabled]="isSavingFullName">
+        {{ isSavingFullName ? 'Saving...' : 'Save' }}
+      </button>
+    </form>
+  </section>
+
+  <section class="password-section">
+    <h2>Change Password</h2>
+    <form (submit)="changePassword(); $event.preventDefault()" class="stacked-form">
+      <div class="form-group">
+        <label for="currentPassword">Current password</label>
+        <input id="currentPassword" type="password" [(ngModel)]="currentPassword" name="currentPassword" required />
+      </div>
+      <div class="form-group">
+        <label for="newPassword">New password</label>
+        <input id="newPassword" type="password" [(ngModel)]="newPassword" name="newPassword" required />
+        <app-password-strength-meter [password]="newPassword"></app-password-strength-meter>
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Confirm new password</label>
+        <input id="confirmPassword" type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required />
+      </div>
+      <button type="submit" class="btn btn-primary btn-sm" [disabled]="isSavingPassword">
+        {{ isSavingPassword ? 'Saving...' : 'Update Password' }}
+      </button>
+    </form>
+  </section>
+
+  <button class="btn btn-danger btn-sm logout-btn" (click)="logout()">Log Out</button>
+</div>

@@ -1,0 +1,74 @@
+<div class="login-page">
+  <div class="login-card">
+    <img src="/logo.png" alt="Logo" class="brand-logo" />
+    <h1>To-Do List</h1>
+    <p class="subtitle">Create an account</p>
+
+    <form (submit)="submit(); $event.preventDefault()" class="login-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <div class="username-row">
+          <input
+            id="username"
+            type="text"
+            [(ngModel)]="username"
+            name="username"
+            placeholder="jdoe"
+            required
+            autocomplete="username"
+          />
+          <button type="button" class="btn-suggest" title="Suggest a random username" (click)="suggestUsername()">🎲</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          #emailModel="ngModel"
+          [pattern]="emailPattern"
+          placeholder="you@example.com"
+          required
+          autocomplete="email"
+        />
+        <p class="field-error" *ngIf="emailModel.invalid && emailModel.touched">Please enter a valid email address.</p>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="••••••••"
+          required
+          autocomplete="new-password"
+        />
+        <app-password-strength-meter [password]="password"></app-password-strength-meter>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm password</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          placeholder="••••••••"
+          required
+          autocomplete="new-password"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Creating account...' : 'Sign Up' }}
+      </button>
+    </form>
+
+    <p class="switch-link">Already have an account? <a routerLink="/login">Sign in</a></p>
+  </div>
+</div>

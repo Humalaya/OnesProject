@@ -1,0 +1,158 @@
+<div class="tasks-page">
+  <header class="tasks-topbar">
+    <div class="tasks-title">TASKS <span class="remaining">{{ remainingCount }} remaining</span></div>
+
+    <div class="tasks-toolbar">
+      <div class="toolbar-select">
+        <label for="sortSelect">sort</label>
+        <select id="sortSelect" [ngModel]="sortBy" (ngModelChange)="onSortChange($event)">
+          <option value="newest">newest</option>
+          <option value="oldest">oldest</option>
+          <option value="priority_asc">↑ priority</option>
+          <option value="priority_desc">↓ priority</option>
+        </select>
+      </div>
+
+      <div class="toolbar-select">
+        <label for="filterSelect">show</label>
+        <select id="filterSelect" [ngModel]="filter" (ngModelChange)="onFilterChange($event)">
+          <option value="all">all</option>
+          <option value="active">active</option>
+          <option value="done">done</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <div class="tasks-body">
+    <!-- New Task Sidebar -->
+    <aside class="task-sidebar">
+      <h2>New Task</h2>
+      <form (submit)="createTodo(); $event.preventDefault()">
+        <label for="newTitle">Title</label>
+        <input id="newTitle" type="text" [(ngModel)]="newTitle" name="newTitle" placeholder="What needs to be done?" required />
+
+        <label for="newDescription">Description</label>
+        <textarea id="newDescription" [(ngModel)]="newDescription" name="newDescription" placeholder="Optional details..." rows="3"></textarea>
+
+        <label>Priority</label>
+        <div class="priority-toggle">
+          <button type="button" class="priority-low" [class.active]="newPriority === 'low'" (click)="setNewPriority('low')">low</button>
+          <button type="button" class="priority-medium" [class.active]="newPriority === 'medium'" (click)="setNewPriority('medium')">med</button>
+          <button type="button" class="priority-high" [class.active]="newPriority === 'high'" (click)="setNewPriority('high')">high</button>
+        </div>
+
+        <label for="tagInput">Tags</label>
+        <div class="tag-input-row">
+          <input
+            id="tagInput"
+            type="text"
+            [(ngModel)]="tagInput"
+            name="tagInput"
+            placeholder="add tag, press enter"
+            (keydown.enter)="$event.preventDefault(); addTag()"
+          />
+          <button type="button" class="btn-tag-add" (click)="addTag()" aria-label="Add tag"><mat-icon>add</mat-icon></button>
+        </div>
+        <div class="tag-chip-list" *ngIf="newTags.length > 0">
+          <span class="tag-chip" *ngFor="let tag of newTags">
+            #{{ tag }}
+            <button type="button" (click)="removeTag(tag)" aria-label="Remove tag">×</button>
+          </span>
+        </div>
+
+        <label for="newDueDate">Due Date</label>
+        <input id="newDueDate" type="date" [(ngModel)]="newDueDate" name="newDueDate" />
+
+        <button type="submit" class="btn-add-task" [disabled]="isBusy">Add Task</button>
+      </form>
+    </aside>
+
+    <!-- Task List -->
+    <section class="task-main">
+      <div *ngIf="todos.length === 0" class="no-tasks">No tasks found. Add a new task from the sidebar!</div>
+
+      <div class="task-rows">
+        <div *ngFor="let todo of todos" class="task-row" [class.completed]="todo.isCompleted">
+
+          <ng-container *ngIf="editId !== todo.id">
+            <div class="row-main" (click)="toggleExpand(todo)">
+              <input
+                type="checkbox"
+                class="row-checkbox"
+                [checked]="todo.isCompleted"
+                [disabled]="isBusy"
+                (click)="$event.stopPropagation()"
+                (change)="toggleComplete(todo)"
+              />
+              <span
+                class="priority-dot"
+                [class.priority-low]="todo.priority === 'low'"
+                [class.priority-medium]="todo.priority === 'medium'"
+                [class.priority-high]="todo.priority === 'high'"
+              ></span>
+              <span class="row-title" [class.strike]="todo.isCompleted">{{ todo.title }}</span>
+
+              <span class="row-tags" *ngIf="todo.tags.length > 0">
+                <span class="tag-chip" *ngFor="let tag of todo.tags">#{{ tag }}</span>
+              </span>
+
+              <span class="row-date" *ngIf="todo.nextScheduledAt">{{ todo.nextScheduledAt | date:'MMM d, y' }}</span>
+
+              <div class="row-actions">
+                <button class="icon-btn" [disabled]="isBusy" (click)="$event.stopPropagation(); startEdit(todo)" aria-label="Edit task">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button class="icon-btn" [disabled]="isBusy" (click)="$event.stopPropagation(); deleteTodo(todo.id)" aria-label="Delete task">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <button
+                  class="icon-btn chevron"
+                  [class.expanded]="expandedId === todo.id"
+                  (click)="$event.stopPropagation(); toggleExpand(todo)"
+                  aria-label="Expand schedules">
+                  <mat-icon>chevron_right</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <p class="row-desc" *ngIf="todo.description">{{ todo.description }}</p>
+
+            <app-task-scheduler
+              *ngIf="expandedId === todo.id"
+              [todoId]="todo.id"
+              (changed)="onScheduleChanged()">
+            </app-task-scheduler>
+          </ng-container>
+
+          <!-- Edit View -->
+          <div *ngIf="editId === todo.id" class="row-edit-form">
+            <input type="text" [(ngModel)]="editTitle" name="editTitle" required />
+            <textarea [(ngModel)]="editDescription" name="editDescription" rows="2"></textarea>
+            <div class="row-edit-actions">
+              <button class="btn-edit-save" [disabled]="isBusy" (click)="saveEdit(todo)">Save</button>
+              <button class="btn-edit-cancel" [disabled]="isBusy" (click)="cancelEdit()">Cancel</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="list-footer">
+        <div class="page-size-picker">
+          <label for="pageSize">Show</label>
+          <select id="pageSize" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
+            <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+          </select>
+          <span>per page</span>
+        </div>
+
+        <div class="pagination" *ngIf="totalCount > 0">
+          <button [disabled]="pageNumber <= 1 || isBusy" (click)="goToPage(pageNumber - 1)">‹ prev</button>
+          <span class="page-info">page {{ pageNumber }} of {{ totalPages }} ({{ totalCount }})</span>
+          <button [disabled]="pageNumber >= totalPages || isBusy" (click)="goToPage(pageNumber + 1)">next ›</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

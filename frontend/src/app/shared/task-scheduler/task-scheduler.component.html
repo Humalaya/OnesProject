@@ -1,0 +1,43 @@
+<div class="scheduler">
+  <div class="scheduler-toolbar">
+    <button type="button" class="btn-tool" [class.active]="selectMode" (click)="toggleSelectMode()">
+      <mat-icon>{{ selectMode ? 'close' : 'checklist' }}</mat-icon>
+      {{ selectMode ? 'Cancel' : 'Select' }}
+    </button>
+
+    <button
+      *ngIf="selectMode"
+      type="button"
+      class="btn-tool btn-tool-danger"
+      [disabled]="selectedIds.size === 0 || isBusy"
+      (click)="deleteSelected()">
+      <mat-icon>delete</mat-icon>
+      Delete ({{ selectedIds.size }})
+    </button>
+
+    <button *ngIf="!selectMode" type="button" class="btn-tool btn-tool-add" [disabled]="isBusy" (click)="add()">
+      <mat-icon>add</mat-icon>
+      Add
+    </button>
+  </div>
+
+  <p class="scheduler-empty" *ngIf="!isLoading && schedules.length === 0">No schedules yet.</p>
+
+  <div class="scheduler-list" cdkDropList [cdkDropListDisabled]="!selectMode" (cdkDropListDropped)="drop($event)">
+    <div class="scheduler-row" *ngFor="let schedule of schedules" cdkDrag [cdkDragDisabled]="!selectMode">
+      <mat-icon *ngIf="selectMode" class="drag-handle" cdkDragHandle>drag_indicator</mat-icon>
+      <input
+        *ngIf="selectMode"
+        type="checkbox"
+        [checked]="isSelected(schedule.id)"
+        (change)="toggleSelected(schedule.id)"
+      />
+      <input
+        type="datetime-local"
+        [value]="toDatetimeLocal(schedule.scheduledAt)"
+        [disabled]="isBusy"
+        (change)="updateScheduledAt(schedule, $any($event.target).value)"
+      />
+    </div>
+  </div>
+</div>

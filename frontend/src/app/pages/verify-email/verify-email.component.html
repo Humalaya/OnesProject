@@ -1,0 +1,20 @@
+<div class="verify-page">
+  <div class="verify-card">
+    <ng-container [ngSwitch]="state">
+      <div *ngSwitchCase="'verifying'">
+        <h1>Verifying…</h1>
+        <p>Please wait while we confirm your email address.</p>
+      </div>
+      <div *ngSwitchCase="'success'">
+        <h1>✅ Verified!</h1>
+        <p>{{ message }}</p>
+        <a routerLink="/" class="btn btn-primary">Go to Tasks</a>
+      </div>
+      <div *ngSwitchCase="'error'">
+        <h1>⚠️ Verification failed</h1>
+        <p>{{ message }}</p>
+        <a routerLink="/" class="btn btn-secondary">Go to Tasks</a>
+      </div>
+    </ng-container>
+  </div>
+</div>

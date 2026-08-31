@@ -1,0 +1,143 @@
+.login-page {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+  padding-left: clamp(20px, 8vw, 120px);
+  background-color: var(--bg);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('/monthly-schedule-tools.jpg') center / cover no-repeat;
+    opacity: 0.12;
+    z-index: 0;
+  }
+
+  @media (max-width: 700px) {
+    justify-content: center;
+    padding-left: 20px;
+  }
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  padding: 40px 35px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 380px;
+
+  .brand-logo {
+    display: block;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 10px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 5px;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 25px;
+  }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  input {
+    padding: 12px 15px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    background: var(--surface);
+    color: var(--text);
+    transition: border-color 0.2s;
+
+    &:focus {
+      border-color: var(--accent);
+    }
+  }
+}
+
+.error {
+  color: var(--danger);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.field-error {
+  color: var(--danger);
+  font-size: 0.8rem;
+}
+
+.btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  &-primary {
+    background-color: var(--accent);
+    color: white;
+    &:hover:not(:disabled) { background-color: var(--accent-hover); }
+  }
+}
+
+.switch-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+
+  a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

@@ -1,0 +1,47 @@
+.verify-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg);
+  padding: 20px;
+}
+
+.verify-card {
+  text-align: center;
+  background: var(--surface);
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  max-width: 420px;
+
+  h1 {
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  p {
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .btn-primary {
+    background-color: var(--accent);
+    color: #fff;
+    &:hover { background-color: var(--accent-hover); }
+  }
+
+  .btn-secondary {
+    background-color: var(--text-faint);
+    color: #fff;
+    &:hover { background-color: var(--text-muted); }
+  }
+}
